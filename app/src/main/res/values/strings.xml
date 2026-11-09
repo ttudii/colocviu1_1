@@ -6,4 +6,6 @@
     <string name="west">West</string>
     <string name="east">East</string>
     <string name="_0">0</string>
+    <string name="register">Register</string>
+    <string name="cancel">Cancel</string>
 </resources>

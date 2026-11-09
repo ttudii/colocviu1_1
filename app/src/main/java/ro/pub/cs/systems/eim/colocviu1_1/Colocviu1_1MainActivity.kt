@@ -1,11 +1,13 @@
 package ro.pub.cs.systems.eim.colocviu1_1
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
@@ -41,6 +43,7 @@ class Colocviu1_1MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.south).setOnClickListener(buttonListener)
         findViewById<Button>(R.id.east).setOnClickListener(buttonListener)
         findViewById<Button>(R.id.west).setOnClickListener(buttonListener)
+        findViewById<Button>(R.id.secondary_activity).setOnClickListener(buttonListener)
     }
 
     fun concatenateToText(id: Int) {
@@ -60,16 +63,37 @@ class Colocviu1_1MainActivity : AppCompatActivity() {
         super.onSaveInstanceState(saveInstanceState)
         Log.d(Constants.TAG, "onSaveInstanceState() method invoked")
 
-        val pressMeEditText: TextView = findViewById(R.id.total_clicks)
-        saveInstanceState.putInt(Constants.TOTAL_CLICKS, (pressMeEditText.getText().toString()).toInt())
+        val totalClicks: TextView = findViewById(R.id.total_clicks)
+        saveInstanceState.putInt(Constants.TOTAL_CLICKS, (totalClicks.getText().toString()).toInt())
     }
 
     protected override fun onRestoreInstanceState(@NonNull saveInstanceState: Bundle) {
         super.onRestoreInstanceState(saveInstanceState)
         Log.d(Constants.TAG, "onRestoreInstanceState() method invoked")
 
-        val pressMeEditText: TextView = findViewById(R.id.total_clicks)
-        pressMeEditText.text = saveInstanceState.getInt(Constants.TOTAL_CLICKS).toString()
+        val totalClicks: TextView = findViewById(R.id.total_clicks)
+        totalClicks.text = saveInstanceState.getInt(Constants.TOTAL_CLICKS).toString()
     }
-    fun navigateToSecondaryActivity() {}
+    fun navigateToSecondaryActivity() {
+        val instructions = findViewById<TextView>(R.id.nsew).text.toString()
+
+        val intent = Intent(this, Colocviu1_1SecondaryActivity::class.java).apply {
+            putExtra(Constants.INSTRUCTIONS, instructions)
+        }
+        startActivityForResult(intent, Constants.SECONDARY_ACTIVITY_REQUEST_CODE)
+    }
+
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+        when (requestCode) {
+            Constants.SECONDARY_ACTIVITY_REQUEST_CODE -> {
+                when(resultCode) {
+                    RESULT_OK -> Toast.makeText(this, "Result from intent is : RESULT_OK", Toast.LENGTH_LONG).show()
+                    RESULT_CANCELED -> Toast.makeText(this, "Result from intent is : RESULT_CANCELED", Toast.LENGTH_LONG).show()
+                }
+                findViewById<TextView>(R.id.total_clicks).text = "0"
+                findViewById<TextView>(R.id.nsew).text = ""
+            }
+        }
+    }
 }
