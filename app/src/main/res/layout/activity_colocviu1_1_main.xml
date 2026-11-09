@@ -61,7 +61,17 @@
         android:layout_marginTop="10dp"
         android:textSize="15sp"
         android:text="@string/north_east_south_west"
-        android:id="@+id/sum"
+        android:id="@+id/nsew"
+        android:enabled="false"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:textSize="15sp"
+        android:text="@string/_0"
+        android:id="@+id/total_clicks"
         android:enabled="false"/>
 
     <Button
