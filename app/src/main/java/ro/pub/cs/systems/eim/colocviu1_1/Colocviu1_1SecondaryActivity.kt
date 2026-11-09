@@ -14,6 +14,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class Colocviu1_1SecondaryActivity : AppCompatActivity() {
+    private var serviceStarted  = false
     private val buttonListener = ButtonListener()
     private inner class ButtonListener : View.OnClickListener {
         override fun onClick(view: View?) {
@@ -50,5 +51,26 @@ class Colocviu1_1SecondaryActivity : AppCompatActivity() {
             findViewById<TextView>(R.id.instructions).text = instructions.toString()
         }
 
+        if(!serviceStarted){ startService() }
+    }
+
+    private fun startService(){
+        val totalClicks: Int = (findViewById<TextView>(R.id.total_clicks).text.toString()).toInt()
+        if(totalClicks > Constants.THRESHOLD) {
+            val instructions = (findViewById<TextView>(R.id.instructions).text.toString())
+            val intent = Intent(this, Colocviu1_Service::class.java).apply {
+                putExtra(Constants.INSTRUCTIONS, instructions)
+            }
+            startService(intent)
+            serviceStarted = true
+        }
+    }
+
+    override fun onDestroy() {
+        val intent = Intent(this, Colocviu1_Service::class.java)
+
+        stopService(intent)
+        serviceStarted = false
+        super.onDestroy()
     }
 }
